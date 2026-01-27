@@ -1766,7 +1766,7 @@
     </script>
 
 
-    <!-- Modal Sugerir Cancion -->
+    <!-- Modal sugerir cancion -->
     <script>
         // Abrir modal
         $('body').on('click', 'a.sugerir-cancion', function (e) {
@@ -1872,23 +1872,37 @@
                 var formulario = $("#formSugerirCancion")[0];
 
                 // Obtengo los datos del formulario
-                var datos = new FormData(formulario);
+                // var datos = new FormData(formulario);
+                var sugerenciaName = $.trim($("#nombreSugerencia").val());
+                var sugerenciaDescription = $.trim($("#descripcionSugerencia").val());
+                var sugerenciaLink = $.trim($("#linkSugerencia").val());
+
+                const datos = {
+                    tipo: 'Musica',
+                    nombre: sugerenciaName,
+                    cancion: sugerenciaDescription,
+                    link: sugerenciaLink,
+                }
+
+                console.log(datos)
 
 
                 // Visualizar como viajan los datos
-                for (var pair of datos.entries()) {
-                    console.log(pair[0] + ", " + pair[1]);
-                }
+                // for (var pair of datos.entries()) {
+                //     console.log(pair[0] + ", " + pair[1]);
+                // }
 
 
                 // Envio con fetch los datos mediante POST
-                fetch(_pathApp + "producto/fetchs/sugerir-cancion.php", {
+                fetch("https://script.google.com/macros/s/AKfycbwMNZDE6XqG8n2XS2sizo-5KL62F9abigcND3iUYLt1Z9-kVLgV6dtwxc0ilDHc3Keg2A/exec", {
                     method: "POST",
-                    body: datos
+                    body: JSON.stringify(datos),
                 })
                     // Promesas fetch
                     .then(res => res.json())
                     .then(data => {
+
+                        console.log("respuesta", data);
 
                         // Si recibo error
                         if (data.error === true) {
@@ -1901,7 +1915,7 @@
                         }
 
                         // Si no hay error
-                        if (data.error === false) {
+                        if (data.status === 'ok') {
 
                             $("#sendSugerenciaCancion").text(lang_sugerirCancion);
                             $("#sendSugerenciaCancion").prop("disabled", false);
