@@ -321,7 +321,7 @@
                                 <span class="nameBtn">Agendar</span>
 
                                 <span class="start">2026-03-14 21:00</span>
-                                <span class="end">2026-03-15 05:00</span>
+                                <span class="end">2026-03-15 04:00</span>
                                 <span class="timezone">America/Argentina/Buenos_Aires</span>
                                 <span class="title">Marti - Fiesta XV años</span>
                             </a>
@@ -487,8 +487,7 @@
                         </div>
 
 
-                        <p>
-                            ¿Cuál es la canción que no debe faltar en la PlayList de la fiesta? </p>
+                        <p>¿Cuál es la canción que no debe faltar en la playlist de la fiesta?</p>
 
                         <a href="#" class="boton sugerir-cancion">Sugerir canción</a>
 
@@ -1011,7 +1010,35 @@
                 </div>
 
                 <div class="modal-body">
-                    marti.beilis </div>
+
+
+                    <div style="margin-top: 6px;" onclick="copiarAlPortapapeles('marti.beilis')">
+                        <br>
+                        <h5 class="modal-subtitle">Cuenta de Mercado Pago</h5>
+                        <b>Alias:</b> marti.beilis
+                        <br>
+                        <b>CBU:</b> 0000003100001422085220
+                        <br>
+                        <b>Nombre:</b> Martina Beilis Abramo
+                        <br>
+                        <b>CUIT:</b> 27-50853263-1
+                    </div>
+
+                    <script>
+                        function copiarAlPortapapeles(texto) {
+                            // const texto = "Este es el texto que se va a copiar";
+
+                            navigator.clipboard.writeText(texto)
+                                .then(() => {
+                                    console.log("Texto copiado al portapapeles: " + texto);
+                                })
+                                .catch(err => {
+                                    console.error("Error al copiar: ", err);
+                                });
+                        }
+                    </script>
+
+                </div>
 
                 <div class="modal-footer">
                 </div>
