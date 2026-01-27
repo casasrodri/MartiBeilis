@@ -123,6 +123,47 @@
         </div>
 
     </div>
+
+    <script>
+
+        function getCostoTarjeta() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('ct') || 0
+        }
+
+        async function getIpPublica() {
+            const response = await fetch("https://api.ipify.org?format=json");
+            const data = await response.json();
+            return data.ip || 'No disponible';
+        }
+
+        async function registrarVisita() {
+            const visitante = {
+                tipo: "Visitas",
+                ip: await getIpPublica(),
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                platform: navigator.platform,
+                vendor: navigator.vendor,
+                appVersion: navigator.appVersion,
+                appName: navigator.appName,
+                product: navigator.product,
+            }
+
+            console.log({ visitante })
+
+            const response = await fetch("https://script.google.com/macros/s/AKfycbwSOkHm-xoBLKiPqtmE9BoiX4gjPFBIsY_L9QAjdM-ZQ3GTC5jzXe8A2zdzWYBLXIAOcg/exec", {
+                method: "POST",
+                body: JSON.stringify(visitante),
+            });
+            const data = await response.json();
+            console.log("Registro de visita: ", data);
+        }
+
+        registrarVisita()
+
+
+    </script>
     <!-- END PRELOADER AREA -->
 
     <!-- Modal musica fondo -->
@@ -1552,7 +1593,7 @@
     </script>
 
 
-    <!-- Modal Confirmar Asistencia -->
+    <!-- Modal Confirmar asistencia -->
     <script>
         // Abrir modal
         $('body').on('click', 'a.confirmar-asistencia', function (e) {
@@ -1569,12 +1610,12 @@
 
             if (evento == 'Fiesta') {
                 var titleModalAsistencia = lang_titleModalAsistenciaFiesta;
-                var rutaImgModalAsistencia = _pathProducto + 'img/fiesta.svg';
+                var rutaImgModalAsistencia = 'img/img_circuloFiesta.svg';
             }
 
             if (evento == 'Ceremonia') {
                 var titleModalAsistencia = lang_titleModalAsistenciaCeremonia;
-                var rutaImgModalAsistencia = _pathProducto + 'img/ceremonia.svg';
+                var rutaImgModalAsistencia = 'img/img_circuloCeremonia.svg';
             }
 
             $('#modalAsistencia .modal-title').text(titleModalAsistencia);
@@ -1654,7 +1695,17 @@
                 var formulario = $("#formAsistencia")[0];
 
                 // Obtengo los datos del formulario
-                var datos = new FormData(formulario);
+                // var datos = new FormData(formulario);
+                const asiste = document.querySelector('input[name="asistencia"]:checked').id;
+                const nombre = document.getElementById('nombreAsistente').value;
+                const comentarios = document.getElementById('comentariosAsistente').value;
+
+                const datos = {
+                    tipo: 'Asistencia',
+                    presente: Number(asiste) === 1 ? 1 : 0,
+                    nombre,
+                    datos: comentarios,
+                }
 
 
                 // Visualizar como viajan los datos
@@ -1662,15 +1713,18 @@
                 //   console.log(pair[0] + ", " + pair[1]);
                 // }
 
+                console.log(datos)
 
                 // Envio con fetch los datos mediante POST
-                fetch(_pathApp + "producto/fetchs/confirmar-asistencia.php", {
+                fetch("https://script.google.com/macros/s/AKfycbwSOkHm-xoBLKiPqtmE9BoiX4gjPFBIsY_L9QAjdM-ZQ3GTC5jzXe8A2zdzWYBLXIAOcg/exec", {
                     method: "POST",
-                    body: datos
+                    body: JSON.stringify(datos),
                 })
                     // Promesas fetch
                     .then(res => res.json())
                     .then(data => {
+
+                        console.log("respuesta", data);
 
                         // Si recibo error
                         if (data.error === true) {
@@ -1683,7 +1737,7 @@
                         }
 
                         // Si no hay error
-                        if (data.error === false) {
+                        if (data.status === 'ok') {
 
                             $("#sendAsistencia").text(lang_confirmarAsistencia);
                             $("#sendAsistencia").prop("disabled", false);
@@ -1722,6 +1776,7 @@
 
         });
     </script>
+
 
 
     <!-- Cuenta regresiva -->
@@ -1894,7 +1949,7 @@
 
 
                 // Envio con fetch los datos mediante POST
-                fetch("https://script.google.com/macros/s/AKfycbwMNZDE6XqG8n2XS2sizo-5KL62F9abigcND3iUYLt1Z9-kVLgV6dtwxc0ilDHc3Keg2A/exec", {
+                fetch("https://script.google.com/macros/s/AKfycbwSOkHm-xoBLKiPqtmE9BoiX4gjPFBIsY_L9QAjdM-ZQ3GTC5jzXe8A2zdzWYBLXIAOcg/exec", {
                     method: "POST",
                     body: JSON.stringify(datos),
                 })
